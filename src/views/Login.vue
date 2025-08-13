@@ -24,6 +24,28 @@
         break;
     }
   };
+
+  const loginWithKakao = () => {
+    // 카카오 REST API 를 호출하기 위한 변수
+    const clientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID;
+    const redirectUri = encodeURIComponent('http://localhost:8080/api/v1/account/kakao/callback');
+    const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+
+    // 카카오 로그인 화면을 새 창으로 띄우기
+    const kakaoWindow = window.open(
+      kakaoAuthUrl,
+      '카카오 로그인',
+      'width=500,height=600,top=100,left=100'
+    );
+
+    // 팝업이 닫히거나 메시지를 받을 때 처리할 수 있음
+    const timer = setInterval(() => {
+        if (kakaoWindow.closed) {
+          clearInterval(timer);
+          console.log('팝업 닫힘, 필요한 후속 처리');
+        }
+    }, 500);
+  }
 </script>
 
 <template>
@@ -41,6 +63,7 @@
         </div>
         <button type="submit" class="w-100 h6 btn py-3 btn-primary">로그인</button>
       </form>
+      <img src="@/assets/kakao_login_medium_narrow.png" @click="loginWithKakao" class="mx-auto d-block kakao-login-btn" />
     </div>
   </div>
 </template>
@@ -48,5 +71,9 @@
 <style lang="scss" scoped>
   .join > .container {
     max-width: 576px;
+  }
+
+  .kakao-login-btn {
+    cursor: pointer;
   }
 </style>
