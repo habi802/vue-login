@@ -25,6 +25,7 @@
     }
   };
 
+  // 카카오 로그인 팝업 창을 여는 함수
   const loginWithKakao = () => {
     // 카카오 REST API 를 호출하기 위한 변수
     const clientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID;
@@ -38,12 +39,26 @@
       'width=500,height=600,top=100,left=100'
     );
 
-    // 팝업이 닫히거나 메시지를 받을 때 처리할 수 있음
     const timer = setInterval(() => {
-        if (kakaoWindow.closed) {
+      try {
+        if (kakaoWindow.location.href.includes('/kakao-login-success')) {
+          const urlParams = new URL(kakaoWindow.location.href).searchParams;
+          const memberId = urlParams.get('memberId');
+          console.log('로그인 완료, memberId:', memberId);
+          kakaoWindow.close();
+
+          router.push('/');
+
           clearInterval(timer);
-          console.log('팝업 닫힘, 필요한 후속 처리');
         }
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (kakaoWindow.closed) {
+        // 팝업 창 닫혔을 때(아무 일 일어나지 않음)
+        clearInterval(timer);
+      }
     }, 500);
   }
 </script>

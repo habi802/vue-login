@@ -15,7 +15,6 @@ const logoutAccount = async () => {
         return;
     }
 
-    alert('로그아웃 되었슴당.');
     account.setLoggedIn(false);
 }
 </script>

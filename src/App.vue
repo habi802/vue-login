@@ -13,7 +13,7 @@ const account = useAccountStore();
 const checkAccount = async () => {
     console.log('로그인 체크');
     const res = await check();
-    console.log(res);
+    console.log('check:', res);
     if (res === undefined || res.status !== 200) {
         account.setChecked(false);
         return;
@@ -33,14 +33,19 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-<template v-if="account.state.checked">
-    <Header />
-    <router-view></router-view>
-    <Footer />
-</template>
-<template v-else>
-    서버 통신 오류
-</template>
+    <template v-if="!$route.href.includes('kakao-login-success')">
+        <template v-if="account.state.checked">
+            <Header />
+            <router-view></router-view>
+            <Footer />
+        </template>
+        <template v-else>
+            서버 통신 오류
+        </template>
+    </template>
+    <template v-else>
+
+    </template>
 </template>
 
 <style scoped>

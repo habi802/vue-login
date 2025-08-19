@@ -45,6 +45,10 @@ const router = createRouter({
       name: 'orderDetail',
       component: OrderDetail
     },
+    {
+      path: '/kakao-login-success',
+      component: '@/views/NoLayOut.vue'
+    }
   ],
 })
 

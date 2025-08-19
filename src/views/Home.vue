@@ -14,7 +14,7 @@
       return;
     }
 
-    console.log(res.data);
+    console.log('item:', res.data);
 
     state.items = res.data;
   });
