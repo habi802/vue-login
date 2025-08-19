@@ -61,6 +61,42 @@
       }
     }, 500);
   }
+
+  // 네이버 로그인 팝업 창을 여는 함수
+  const loginWithNaver = () => {
+    const clientId = import.meta.env.VITE_NAVER_LOGIN_CLIENT_ID;
+    const redirectUri = encodeURIComponent('http://localhost:8080/api/v1/account/login/naver');
+    const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
+  
+    // 카카오 로그인 화면을 새 창으로 띄우기
+    const naverWindow = window.open(
+      naverAuthUrl,
+        '네이버 로그인',
+        'width=500,height=600,top=100,left=100'
+    );
+
+    const timer = setInterval(() => {
+      try {
+        if (naverWindow.location.href.includes('/naver-login-success')) {
+          const urlParams = new URL(naverWindow.location.href).searchParams;
+          const memberId = urlParams.get('memberId');
+          console.log('로그인 완료, memberId:', memberId);
+          naverWindow.close();
+
+          router.push('/');
+
+          clearInterval(timer);
+        }
+      } catch (e) {
+        console.log(e);
+      }
+
+      if (naverWindow.closed) {
+        // 팝업 창 닫혔을 때(아무 일 일어나지 않음)
+        clearInterval(timer);
+      }
+    }, 500);
+  };
 </script>
 
 <template>
@@ -79,7 +115,7 @@
         <button type="submit" class="w-100 h6 btn py-3 btn-primary">로그인</button>
       </form>
       <img src="@/assets/kakao_login.png" @click="loginWithKakao" class="mx-auto d-block login-btn" />
-      <img src="@/assets/naver_login.png" @click="" class="mx-auto d-block login-btn" />
+      <img src="@/assets/naver_login.png" @click="loginWithNaver" class="mx-auto d-block login-btn" />
     </div>
   </div>
 </template>
