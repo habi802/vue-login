@@ -28,7 +28,7 @@
   const loginWithKakao = () => {
     // 카카오 REST API 를 호출하기 위한 변수
     const clientId = import.meta.env.VITE_KAKAO_LOGIN_CLIENT_ID;
-    const redirectUri = encodeURIComponent('http://localhost:8080/api/v1/account/kakao/callback');
+    const redirectUri = encodeURIComponent('http://localhost:8080/api/v1/account/login/kakao');
     const kakaoAuthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code`;
 
     // 카카오 로그인 화면을 새 창으로 띄우기
@@ -63,7 +63,8 @@
         </div>
         <button type="submit" class="w-100 h6 btn py-3 btn-primary">로그인</button>
       </form>
-      <img src="@/assets/kakao_login_medium_narrow.png" @click="loginWithKakao" class="mx-auto d-block kakao-login-btn" />
+      <img src="@/assets/kakao_login.png" @click="loginWithKakao" class="mx-auto d-block login-btn" />
+      <img src="@/assets/naver_login.png" @click="" class="mx-auto d-block login-btn" />
     </div>
   </div>
 </template>
@@ -73,7 +74,9 @@
     max-width: 576px;
   }
 
-  .kakao-login-btn {
+  .login-btn {
     cursor: pointer;
+    width: 250px;
+    height: 75px;
   }
 </style>
