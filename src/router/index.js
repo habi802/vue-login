@@ -6,6 +6,7 @@ import Cart from '@/views/Cart.vue'
 import Order from '@/views/OrderForm.vue'
 import Orders from '@/views/Orders.vue'
 import OrderDetail from '@/views/OrderDetail.vue'
+import LoginSuccess from '@/views/loginSuccess.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -46,8 +47,9 @@ const router = createRouter({
       component: OrderDetail
     },
     {
-      path: '/kakao-login-success',
-      component: '@/views/NoLayOut.vue'
+      path: '/login-success',
+      name: 'loginSuccess',
+      component: LoginSuccess
     }
   ],
 })

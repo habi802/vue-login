@@ -33,18 +33,13 @@ watch(() => route.path, () => {
 </script>
 
 <template>
-    <template v-if="!$route.href.includes('kakao-login-success')">
-        <template v-if="account.state.checked">
-            <Header />
-            <router-view></router-view>
-            <Footer />
-        </template>
-        <template v-else>
-            서버 통신 오류
-        </template>
+    <template v-if="account.state.checked">
+        <Header />
+        <router-view></router-view>
+        <Footer />
     </template>
     <template v-else>
-
+        서버 통신 오류
     </template>
 </template>
 

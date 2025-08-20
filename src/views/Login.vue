@@ -40,23 +40,9 @@
     );
 
     const timer = setInterval(() => {
-      try {
-        if (kakaoWindow.location.href.includes('/kakao-login-success')) {
-          const urlParams = new URL(kakaoWindow.location.href).searchParams;
-          const memberId = urlParams.get('memberId');
-          console.log('로그인 완료, memberId:', memberId);
-          kakaoWindow.close();
-
-          router.push('/');
-
-          clearInterval(timer);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-
+      // 팝업 창에 대한 후속 처리를 원하는 경우 여기다 if문을 써서 넣으면 됨
       if (kakaoWindow.closed) {
-        // 팝업 창 닫혔을 때(아무 일 일어나지 않음)
+        // 예) 팝업 창 닫혔을 때(지금은 아무 일 일어나지 않음)
         clearInterval(timer);
       }
     }, 500);
@@ -76,27 +62,24 @@
     );
 
     const timer = setInterval(() => {
-      try {
-        if (naverWindow.location.href.includes('/naver-login-success')) {
-          const urlParams = new URL(naverWindow.location.href).searchParams;
-          const memberId = urlParams.get('memberId');
-          console.log('로그인 완료, memberId:', memberId);
-          naverWindow.close();
-
-          router.push('/');
-
-          clearInterval(timer);
-        }
-      } catch (e) {
-        console.log(e);
-      }
-
+      // 팝업 창에 대한 후속 처리를 원하는 경우 여기다 if문을 써서 넣으면 됨
       if (naverWindow.closed) {
-        // 팝업 창 닫혔을 때(아무 일 일어나지 않음)
+        // 예) 팝업 창 닫혔을 때(지금은 아무 일 일어나지 않음)
         clearInterval(timer);
       }
     }, 500);
   };
+
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'http://localhost:5173') {
+      return;
+    }
+
+    if (event.data.type === 'LOGIN_SUCCESS') {
+      console.log('로그인 성공!', event.data);
+      router.push('/');
+    }
+  });
 </script>
 
 <template>
@@ -113,9 +96,9 @@
           <label for="loginPw">패스워드</label>
         </div>
         <button type="submit" class="w-100 h6 btn py-3 btn-primary">로그인</button>
+        <img src="@/assets/kakao_login.png" @click="loginWithKakao" class="w-100 login-btn" />
+        <img src="@/assets/naver_login.png" @click="loginWithNaver" class="w-100 login-btn" />
       </form>
-      <img src="@/assets/kakao_login.png" @click="loginWithKakao" class="mx-auto d-block login-btn" />
-      <img src="@/assets/naver_login.png" @click="loginWithNaver" class="mx-auto d-block login-btn" />
     </div>
   </div>
 </template>
@@ -127,7 +110,5 @@
 
   .login-btn {
     cursor: pointer;
-    width: 250px;
-    height: 75px;
   }
 </style>
