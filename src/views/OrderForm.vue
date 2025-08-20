@@ -122,6 +122,10 @@
               <input id="bank" name="paymentMethod" type="radio" class="form-check-input" value="bank" v-model="state.form.payment">
               <label class="form-check-label" for="bank">무통장 입금</label>
             </div>
+            <div class="form-check">
+              <input id="kakao" name="paymentMethod" type="radio" class="form-check-input" value="kakao" v-model="state.form.payment">
+              <label class="form-check-label" for="kakao">카카오페이</label>
+            </div>
           </div>
           <div class="pt-1" v-if="state.form.payment === 'card'">
             <label for="cardNum" class="form-label">카드 번호</label>
