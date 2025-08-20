@@ -32,6 +32,10 @@
       // 결제 수단이 카드가 아니라면 카드 번호를 지운다.
       state.form.cardNumber = '';
     }
+
+    if (state.form.payment === 'kakao') {
+      // 결제 수단이 카카오페이일 경우
+    }
     
     state.form.itemIds = state.items.map(item => item.itemId);
     const res = await addOrder(state.form);
