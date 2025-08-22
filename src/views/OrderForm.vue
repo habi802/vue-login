@@ -2,7 +2,7 @@
   import { computed, onMounted, reactive } from 'vue';
   import { useRouter } from 'vue-router';
   import { getItems } from '@/services/cartService';
-  import { addOrder } from '@/services/orderService';
+  import { addOrder, getKakaoPayReady } from '@/services/orderService';
 
   const router = useRouter();
 
@@ -35,6 +35,21 @@
 
     if (state.form.payment === 'kakao') {
       // 결제 수단이 카카오페이일 경우
+      const kakaoReadyRes = await getKakaoPayReady(state.form);
+      if (kakaoReadyRes === undefined || kakaoReadyRes.status !== 200) {
+        alert('카카오페이 결제 에러 발생');
+        return;
+      }
+
+      const kakaoPayUrl = kakaoReadyRes.data.next_redirect_pc_url;
+
+      // 카카오페이 결제 화면을 새 창으로 띄우기
+      const kakaoWindow = window.open(
+        kakaoPayUrl,
+        '카카오페이 결제',
+        'width=500,height=600,top=100,left=100'
+      );
+      return;
     }
     
     state.form.itemIds = state.items.map(item => item.itemId);
