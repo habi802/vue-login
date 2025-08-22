@@ -8,6 +8,7 @@ onMounted(() => {
     console.log('페이 제대로 불러옴');
     let type = '';
     let message = '';
+    let data = {};
 
     if (!route.query.result) {
         type = 'PAY_FAIL';
@@ -17,6 +18,10 @@ onMounted(() => {
         if (result === 'APPROVE') {
             type = 'PAY_APPROVE';
             message = '결제 승인됨';
+            data = {
+                orderId: route.query.order_id,
+                pgToken: route.query.pg_token
+            };
         } else if (result === 'FAIL') {
             type = 'PAY_FAIL';
             message = '결제 중 에러가 발생했습니다.';
@@ -27,7 +32,8 @@ onMounted(() => {
     }
     window.opener.postMessage({
         type: type,
-        resultMessage: message
+        resultMessage: message,
+        resultData: data
     }, 'http://localhost:5173');
     window.close();
 });

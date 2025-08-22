@@ -13,7 +13,10 @@
       address: '',
       payment: 'card',
       cardNumber: '',
-      itemIds: []
+      itemIds: [],
+      tid: '',
+      orderId: '',
+      pgToken: ''
     }
   });
 
@@ -27,7 +30,7 @@
     state.items = res.data;
   });
 
-  const submit = async () => {
+  const checkPaymentBeforeSubmit = async () => {
     if (state.form.payment !== 'card') {
       // 결제 수단이 카드가 아니라면 카드 번호를 지운다.
       state.form.cardNumber = '';
@@ -42,6 +45,8 @@
       }
 
       const kakaoPayUrl = kakaoReadyRes.data.next_redirect_pc_url;
+      state.form.tid = kakaoReadyRes.data.tid;
+      state.form.orderId = kakaoReadyRes.data.orderId;
 
       // 카카오페이 결제 화면을 새 창으로 띄우기
       const kakaoWindow = window.open(
@@ -51,9 +56,17 @@
       );
 
       return;
+    } else {
+      state.form.tid = '';
+      state.form.pgToken = '';
     }
-    
+
+    submit();
+  };
+
+  const submit = async () => {
     state.form.itemIds = state.items.map(item => item.itemId);
+
     const res = await addOrder(state.form);
     if (res === undefined || res.status !== 200) {
       alert('에러 발생');
@@ -77,6 +90,8 @@
 
     if (event.data.type === 'PAY_APPROVE') {
       console.log('결제 성공!', event.data);
+      state.form.pgToken = event.data.resultData.pgToken;
+      submit();
     } else if (event.data.type === 'PAY_CANCEL') {
       console.log('결제 취소', event.data);
     } else {
@@ -96,7 +111,7 @@
 </script>
 
 <template>
-  <form class="order-form" @submit.prevent="submit">
+  <form class="order-form" @submit.prevent="checkPaymentBeforeSubmit">
     <div class="container">
       <div class="py-5 text-center">
         <div class="h4">
