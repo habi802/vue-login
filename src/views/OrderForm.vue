@@ -49,6 +49,7 @@
         '카카오페이 결제',
         'width=500,height=600,top=100,left=100'
       );
+
       return;
     }
     
@@ -68,6 +69,20 @@
     alert(message.join('\n'));
     await router.push('/');
   };
+
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'http://localhost:5173') {
+      return;
+    }
+
+    if (event.data.type === 'PAY_APPROVE') {
+      console.log('결제 성공!', event.data);
+    } else if (event.data.type === 'PAY_CANCEL') {
+      console.log('결제 취소', event.data);
+    } else {
+      console.log('결제 중 에러 발생', event.data);
+    }
+  });
 
   const computedTotalPrice = computed(() => {
     let totalPrice = 0;

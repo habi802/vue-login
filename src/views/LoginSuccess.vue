@@ -5,7 +5,7 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 
 onMounted(() => {
-    console.log('제대로 불러옴');
+    console.log('로그인 제대로 불러옴');
     if (route.query.memberId) {
         window.opener.postMessage({
             type: 'LOGIN_SUCCESS',
